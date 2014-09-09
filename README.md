@@ -13,7 +13,8 @@ You can also optionally pass a second argument along with the options to overrid
 
 ```
 {
-	splitter: ';'
+	splitter: ';',
+	async: false
 }
 ```
 

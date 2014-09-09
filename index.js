@@ -18,6 +18,12 @@ module.exports = function(baseUri, options) {
       var genComboScriptUriTag = function() {
           var uri = baseUri + src.scripts.join(options.splitter || ';');
           var scriptTag = '<script type="text/javascript" src="' + uri + '"></script>';
+          var async = options.async || false;
+
+          if(async === true) {
+              scriptTag = '<script type="text/javascript" src="' + uri + '" async="async"></script>';
+          }
+
           return scriptTag;
       };
 
