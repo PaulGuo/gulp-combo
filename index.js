@@ -56,6 +56,10 @@ module.exports = function(baseUri, options) {
 
       filteredScripts.forEach(function(script, i) {
           var src_attr = $(script).attr('src');
+
+          if(filteredScripts.length <= 1) {
+              return;
+          }
           
           src.scripts.push(src_attr.replace('http://mc.yourdomainname.net/', ''));
 
@@ -68,6 +72,10 @@ module.exports = function(baseUri, options) {
 
       filteredLinks.forEach(function(link, i) {
           var href_attr = $(link).attr('href');
+
+          if(filteredLinks.length <= 1) {
+              return;
+          }
           
           src.links.push(href_attr.replace('http://mc.yourdomainname.net/', ''));
 
