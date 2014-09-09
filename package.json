@@ -1,6 +1,6 @@
 {
   "name": "gulp-combo",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "html scripts, links combo for gulp",
   "main": "index.js",
   "homepage": "https://github.com/PaulGuo/gulp-combo",

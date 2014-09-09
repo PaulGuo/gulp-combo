@@ -3,7 +3,7 @@ var through = require('through2'),
     cheerio = require("cheerio");
 
 module.exports = function(baseUri, options) {
-  baseUri = baseUri || 'http://mc.yourdomainname.net/combo?f=';
+  baseUri = baseUri || 'http://mc.yourdomainname.net/combo/?f=';
   options = options || {};
 
   return through.obj(function(file, enc, cb) {
