@@ -6,7 +6,7 @@ A gulp plugin [gulp-combo](https://github.com/PaulGuo/gulp-combo) will combo all
 You can optionally pass a first argument along with the baseUri to override the default baseUri statements. The default baseUri looks like this:
 
 ```
-baseUri = 'http://mc.meituan.net/combo?f=';
+baseUri = 'http://mc.meituan.net/combo/?f=';
 ```
 
 You can also optionally pass a second argument along with the options to override the default options statements. The default options looks like this:
