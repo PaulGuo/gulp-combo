@@ -142,7 +142,7 @@ module.exports = function(baseUri, options) {
             return '';
         };
 
-        chunk = chunk.replace(/<script[^>]+?src="([^"]+)"><\/script>/igm, scriptProcessor);
+        chunk = chunk.replace(/<script[^>]+?src="([^"]+)"[^>]*><\/script>/igm, scriptProcessor);
         chunk = chunk.replace(/<link[^>]+?href="([^"]+?)"[^>]+?rel="stylesheet"[^>]*>/igm, linkProcessor);
         chunk = chunk.replace(/<link[^>]+?rel="stylesheet"[^>]+?href="([^"]+?)"[^>]*>/igm, linkProcessor);
 
