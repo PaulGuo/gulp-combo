@@ -24,6 +24,14 @@ module.exports = function(baseUri, options) {
             var scriptTag = '<script type="text/javascript" src="' + uri + '"></script>';
             var async = options.async || false;
 
+            if(chunk.match('<!--combo async:false-->')) {
+                async = false;
+            }
+
+            if(chunk.match('<!--combo async:true-->')) {
+                async = true;
+            }
+
             if(async === true) {
                   scriptTag = '<script type="text/javascript" src="' + uri + '" async="async"></script>';
             }
