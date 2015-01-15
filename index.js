@@ -1,4 +1,6 @@
+/* jshint node: true */
 'use strict';
+
 var through = require('through2'),
     cheerio = require("cheerio");
 
@@ -7,12 +9,6 @@ module.exports = function(baseUri, options) {
     options = options || {};
 
     return through.obj(function(file, enc, cb) {
-        /*
-        var $ = cheerio.load(String(file.contents));
-        var scripts, links, results;
-        var filteredScripts = [], filteredLinks = [];
-        */
-
         var chunk = String(file.contents);
         var src = {
             scripts: [],
@@ -45,78 +41,10 @@ module.exports = function(baseUri, options) {
             return linkTag;
         };
 
-        /*
-
-        scripts = $('script[src]');
-        links = $('link[rel="stylesheet"][href]');
-
-        scripts.each(function(i, script) {
-            var src_attr = $(script).attr('src');
-
-            if(src_attr.match(/^http:\/\//igm)) {
-                if(src_attr.match(/^http:\/\/mc.meituan.net\//igm)) {
-                    filteredScripts.push(script);
-                }
-            } else {
-                    filteredScripts.push(script);
-            }
-        });
-
-        links.each(function(i, link) {
-            var href_attr = $(link).attr('href');
-
-            if(href_attr.match(/^http:\/\//igm)) {
-                if(href_attr.match(/^http:\/\/mc.meituan.net\//igm)) {
-                    filteredLinks.push(link);
-                }
-            } else {
-                    filteredLinks.push(link);
-            }
-        });
-
-        filteredScripts.forEach(function(script, i) {
-            var src_attr = $(script).attr('src');
-
-            if(filteredScripts.length <= 1) {
-                  return;
-            }
-            
-            src.scripts.push(src_attr.replace('http://mc.meituan.net/', ''));
-
-            if(i === scripts.length - 1) {
-                  $(script).replaceWith('<!--SCRIPT PLACEHOLDER-->');
-            } else {
-                  $(script).remove();
-            }
-        });
-
-        filteredLinks.forEach(function(link, i) {
-            var href_attr = $(link).attr('href');
-
-            if(filteredLinks.length <= 1) {
-                  return;
-            }
-            
-            src.links.push(href_attr.replace('http://mc.meituan.net/', ''));
-
-            if(i === links.length - 1) {
-                  $(link).replaceWith('<!--LINK PLACEHOLDER-->');
-            } else {
-                  $(link).remove();
-            }
-        });
-
-        results = $.html(null, {decodeEntities: false}).replace('<!--SCRIPT PLACEHOLDER-->', genComboScriptUriTag())
-                                .replace('<!--LINK PLACEHOLDER-->', genComboLinkUriTag());
-
-        file.contents = new Buffer(results);
-        cb(null, file);
-
-        */
-
-        var group = (chunk.replace(/[\r\n]/g, '').match(/\<\!\-\-\[if[^\]]+\]\>.*?\<\!\[endif\]\-\-\>/igm) || []).join('');
+        var group = (chunk.replace(/[\r\n]/g, '').match(/<\!\-\-\[if[^\]]+\]>.*?<\!\[endif\]\-\->/igm) || []).join('');
 
         var scriptProcessor = function($, $1) {
+            // 忽略CSS条件注释中的COMBO
             if(group && group.indexOf($) !== -1) {
                 return $;
             }
