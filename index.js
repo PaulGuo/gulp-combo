@@ -114,7 +114,13 @@ module.exports = function(baseUri, options) {
 
         */
 
+        var group = (chunk.replace(/[\r\n]/g, '').match(/\<\!\-\-\[if[^\]]+\]\>.*?\<\!\[endif\]\-\-\>/igm) || []).join('');
+
         var scriptProcessor = function($, $1) {
+            if(group && group.indexOf($) !== -1) {
+                return $;
+            }
+
             if($.match(/http:\/\//igm)) {
                 if($1.match(/^http:\/\/mc.meituan.net\//igm)) {
                     src.scripts.push($1.replace('http://mc.meituan.net/', ''));
@@ -149,6 +155,7 @@ module.exports = function(baseUri, options) {
 
             return '';
         };
+
 
         chunk = chunk.replace(/<script[^>]+?src="([^"]+)"[^>]*><\/script>/igm, scriptProcessor);
         chunk = chunk.replace(/<link[^>]+?href="([^"]+?)"[^>]+?rel="stylesheet"[^>]*>/igm, linkProcessor);
