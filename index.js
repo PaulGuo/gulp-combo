@@ -44,6 +44,11 @@ module.exports = function(baseUri, options) {
         var group = (chunk.replace(/[\r\n]/g, '').match(/<\!\-\-\[if[^\]]+\]>.*?<\!\[endif\]\-\->/igm) || []).join('');
 
         var scriptProcessor = function($, $1) {
+            // 增加忽略属性避免条件注释或者模板条件判断中的资源被合并
+            if($.match('data-ignore="true"')) {
+                return $;
+            }
+
             // 忽略CSS条件注释中的COMBO
             if(group && group.indexOf($) !== -1) {
                 return $;
@@ -67,6 +72,11 @@ module.exports = function(baseUri, options) {
         };
 
         var linkProcessor = function($, $1) {
+            // 增加忽略属性避免条件注释或者模板条件判断中的资源被合并
+            if($.match('data-ignore="true"')) {
+                return $;
+            }
+
             if($.match(/http:\/\//igm)) {
                 if($1.match(/^http:\/\/mc.yourdomainname.net\//igm)) {
                     src.links.push($1.replace('http://mc.yourdomainname.net/', ''));
