@@ -43,14 +43,20 @@ module.exports = function(baseUri, options) {
 
         var group = (chunk.replace(/[\r\n]/g, '').match(/<\!\-\-\[if[^\]]+\]>.*?<\!\[endif\]\-\->/igm) || []).join('');
 
-        var scriptProcessor = function($, $1) {
-            // 增加忽略属性避免条件注释或者模板条件判断中的资源被合并
-            if($.match('data-ignore="true"')) {
-                return $;
+        /*
+         * 增加忽略属性避免条件注释或者模板条件判断中的资源被合并
+         * 自动忽略if ie条件注释
+         */
+        var isIgnore = function(str) {
+            if(str.match('data-ignore="true"') || (group && group.indexOf(str) !== -1)) {
+                return true;
             }
 
-            // 忽略CSS条件注释中的COMBO
-            if(group && group.indexOf($) !== -1) {
+            return false;
+        };
+
+        var scriptProcessor = function($, $1) {
+            if(isIgnore($)) {
                 return $;
             }
 
@@ -72,8 +78,7 @@ module.exports = function(baseUri, options) {
         };
 
         var linkProcessor = function($, $1) {
-            // 增加忽略属性避免条件注释或者模板条件判断中的资源被合并
-            if($.match('data-ignore="true"')) {
+            if(isIgnore($)) {
                 return $;
             }
 
