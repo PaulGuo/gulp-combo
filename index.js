@@ -5,7 +5,7 @@ var through = require('through2'),
     cheerio = require("cheerio");
 
 module.exports = function(baseUri, options) {
-    baseUri = baseUri || 'http://mc.yourdomainname.net/combo/?f=';
+    baseUri = baseUri || '//mc.yourdomainname.net/combo/?f=';
     options = options || {};
 
     return through.obj(function(file, enc, cb) {
@@ -43,26 +43,20 @@ module.exports = function(baseUri, options) {
 
         var group = (chunk.replace(/[\r\n]/g, '').match(/<\!\-\-\[if[^\]]+\]>.*?<\!\[endif\]\-\->/igm) || []).join('');
 
-        /*
-         * 增加忽略属性避免条件注释或者模板条件判断中的资源被合并
-         * 自动忽略if ie条件注释
-         */
-        var isIgnore = function(str) {
-            if(str.match('data-ignore="true"') || (group && group.indexOf(str) !== -1)) {
-                return true;
-            }
-
-            return false;
-        };
-
         var scriptProcessor = function($, $1) {
-            if(isIgnore($)) {
+            // 增加忽略属性避免条件注释或者模板条件判断中的资源被合并
+            if($.match('data-ignore="true"')) {
                 return $;
             }
 
-            if($.match(/http:\/\//igm)) {
-                if($1.match(/^http:\/\/mc.yourdomainname.net\//igm)) {
-                    src.scripts.push($1.replace('http://mc.yourdomainname.net/', ''));
+            // 忽略CSS条件注释中的COMBO
+            if(group && group.indexOf($) !== -1) {
+                return $;
+            }
+
+            if($.match(/\/\//igm)) {
+                if($1.match(/^\/\/mc.yourdomainname.net\//igm)) {
+                    src.scripts.push($1.replace('//mc.yourdomainname.net/', ''));
                 } else {
                     return $;
                 }
@@ -78,13 +72,14 @@ module.exports = function(baseUri, options) {
         };
 
         var linkProcessor = function($, $1) {
-            if(isIgnore($)) {
+            // 增加忽略属性避免条件注释或者模板条件判断中的资源被合并
+            if($.match('data-ignore="true"')) {
                 return $;
             }
 
-            if($.match(/http:\/\//igm)) {
-                if($1.match(/^http:\/\/mc.yourdomainname.net\//igm)) {
-                    src.links.push($1.replace('http://mc.yourdomainname.net/', ''));
+            if($.match(/\/\//igm)) {
+                if($1.match(/^\/\/mc.yourdomainname.net\//igm)) {
+                    src.links.push($1.replace('//mc.yourdomainname.net/', ''));
                 } else {
                     return $;
                 }
