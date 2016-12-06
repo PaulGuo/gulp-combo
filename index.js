@@ -55,8 +55,9 @@ module.exports = function(baseUri, options) {
             }
 
             if($.match(/\/\//igm)) {
-                if($1.match(/^\/\/mc.yourdomainname.net\//igm)) {
-                    src.scripts.push($1.replace('//mc.yourdomainname.net/', ''));
+                var matchs = $1.match(/^(http(s)?:)?\/\/mc.yourdomainname.net\//igm);
+                if(matchs) {
+                    src.scripts.push($1.replace(matchs[0], ''));
                 } else {
                     return $;
                 }
@@ -78,8 +79,9 @@ module.exports = function(baseUri, options) {
             }
 
             if($.match(/\/\//igm)) {
-                if($1.match(/^\/\/mc.yourdomainname.net\//igm)) {
-                    src.links.push($1.replace('//mc.yourdomainname.net/', ''));
+                var matchs = $1.match(/^(http(s)?:)?\/\/mc.yourdomainname.net\//igm);
+                if(matchs) {
+                    src.links.push($1.replace(matchs[0], ''));
                 } else {
                     return $;
                 }
