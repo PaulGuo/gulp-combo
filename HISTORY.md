@@ -7,3 +7,7 @@ Gulp Combo Change History
 
 * 修复条件注释中的代码也会被合并的问题。
 
+0.1.11
+------
+
+* 默认链接支持http(s)的替换
