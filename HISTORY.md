@@ -11,3 +11,8 @@ Gulp Combo Change History
 ------
 
 * 默认链接支持http(s)的替换
+
+0.1.12
+------
+
+* 替换路径支持通过options.replaceDomain配置指定域名的替换，覆盖默认域名（mc.meituan.net）
