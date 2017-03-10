@@ -55,7 +55,14 @@ module.exports = function(baseUri, options) {
             }
 
             if($.match(/\/\//igm)) {
-                var matchs = $1.match(/^(http(s)?:)?\/\/mc.yourdomainname.net\//igm);
+                var matchs;
+                if (options.replaceDomain) {
+                    // replaceDomain为需要被替换的域名，覆盖默认正则
+                    var reg = new RegExp('^(http(s)?:)?\/\/' + options.replaceDomain + '\/', 'igm');
+                    matchs = $1.match(reg);
+                } else {
+                    matchs = $1.match(/^(http(s)?:)?\/\/mc.yourdomainname.net\//igm);
+                }
                 if(matchs) {
                     src.scripts.push($1.replace(matchs[0], ''));
                 } else {
@@ -79,7 +86,14 @@ module.exports = function(baseUri, options) {
             }
 
             if($.match(/\/\//igm)) {
-                var matchs = $1.match(/^(http(s)?:)?\/\/mc.yourdomainname.net\//igm);
+                var matchs;
+                if (options.replaceDomain) {
+                    // replaceDomain为需要被替换的域名，覆盖默认正则
+                    var reg = new RegExp('^(http(s)?:)?\/\/' + options.replaceDomain + '\/', 'igm');
+                    matchs = $1.match(reg);
+                } else {
+                    matchs = $1.match(/^(http(s)?:)?\/\/mc.yourdomainname.net\//igm);
+                }
                 if(matchs) {
                     src.links.push($1.replace(matchs[0], ''));
                 } else {
